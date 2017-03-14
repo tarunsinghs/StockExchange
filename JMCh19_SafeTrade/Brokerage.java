@@ -11,7 +11,8 @@ public class Brokerage implements Login
     private StockExchange exchange;
 
     // TODO complete class
-
+    
+    //Adding a comment for git
     
     //
     // The following are for test purposes only
