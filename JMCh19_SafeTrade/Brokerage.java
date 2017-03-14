@@ -13,7 +13,6 @@ public class Brokerage implements Login
     // TODO complete class
     
     //Adding a comment for git
-    //David Xu Adding a comment
     
     //
     // The following are for test purposes only
