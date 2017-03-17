@@ -1,17 +1,43 @@
 import java.lang.reflect.*;
 import java.util.*;
 
+
 /**
  * Represents a stock trader.
  */
 public class Trader implements Comparable<Trader>
 {
     private Brokerage brokerage;
+
     private String screenName, password;
+
     private TraderWindow myWindow;
+
     private Queue<String> mailbox;
 
+
     // TODO complete class
+    public Trader( Brokerage brokerage, String name, String pswd )
+    {
+        this.brokerage = brokerage;
+        screenName = name;
+        password = pswd;
+    }
+    
+    public String getName()
+    {
+        return screenName;
+    }
+    
+    public String getPassword()
+    {
+        return password;
+    }
+    
+    public int compareTo(Trader other)
+    {
+        
+    }
 
 
     //
@@ -21,7 +47,8 @@ public class Trader implements Comparable<Trader>
     {
         return mailbox;
     }
-    
+
+
     /**
      * <p>
      * A generic toString implementation that uses reflection to print names and
