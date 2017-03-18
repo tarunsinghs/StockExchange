@@ -23,20 +23,103 @@ public class Trader implements Comparable<Trader>
         screenName = name;
         password = pswd;
     }
-    
+
+
     public String getName()
     {
         return screenName;
     }
-    
+
+
     public String getPassword()
     {
         return password;
     }
-    
-    public int compareTo(Trader other)
+
+
+    public int compareTo( Trader other )
     {
-        
+        int result = screenName.compareToIgnoreCase( other.getName() );
+        return result;
+    }
+
+
+    public boolean equals( Object other )
+    {
+        if ( other instanceof Trader )
+        {
+            throw new ClassCastException();
+        }
+        else
+        {
+            if ( this.compareTo( (Trader)other ) == 0 )
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+
+
+    public void openWindow()
+    {
+        myWindow = new TraderWindow( this );
+
+        while ( mailbox.peek() != null )
+        {
+            String msg = mailbox.remove();
+            myWindow.showMessage( msg );
+        }
+    }
+
+
+    public boolean hasMessages()
+    {
+        return ( mailbox.peek() != null );
+    }
+
+
+    public void receiveMessage( String msg )
+    {
+        mailbox.add( msg );
+
+        if ( myWindow != null )
+        {
+            while ( mailbox.peek() != null )
+            {
+                String mg = mailbox.remove();
+                myWindow.showMessage( mg );
+            }
+        }
+
+    }
+
+
+    public void getQuote( String symbol )
+    {
+        brokerage.getQuote( symbol, this ); // this error will go away when
+                                            // 'getQuote' is written in the
+                                            // Brokerage class
+
+    }
+
+
+    public void placeOrder( TradeOrder order )
+    {
+        brokerage.placeOrder( order ); // this error will go away when
+                                       // 'placeOrder' is written in the
+                                       // Brokerage class
+    }
+
+
+    public void quit()
+    {
+        brokerage.logout( this ); // this error will go away when 'logout' is
+                                  // written in the Brokerage class
+        myWindow = null;
     }
 
 
