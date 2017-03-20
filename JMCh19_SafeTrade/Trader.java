@@ -7,7 +7,7 @@ import java.util.*;
  * This is the Trader Class Creates a trader, has various functions that include
  * getting the name, password send and receive messages, etc.
  *
- * @author Avinash Jain
+ * @author Andrea Pan
  * @version Mar 20, 2017
  * @author Period: 5
  * @author Assignment: JMCh19_SafeTrade
@@ -22,6 +22,7 @@ public class Trader implements Comparable<Trader>
     private TraderWindow myWindow;
 
     private Queue<String> mailbox;
+
 
     public Trader( Brokerage brokerage, String name, String pswd )
     {
@@ -106,9 +107,7 @@ public class Trader implements Comparable<Trader>
 
     public void getQuote( String symbol )
     {
-        brokerage.getQuote( symbol, this ); // this error will go away when
-                                            // 'getQuote' is written in the
-                                            // Brokerage class
+        brokerage.getQuote( symbol, this );
 
     }
 
@@ -123,8 +122,7 @@ public class Trader implements Comparable<Trader>
 
     public void quit()
     {
-        brokerage.logout( this ); // this error will go away when 'logout' is
-                                  // written in the Brokerage class
+        brokerage.logout( this );
         myWindow = null;
     }
 
