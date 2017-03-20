@@ -38,9 +38,23 @@ public class Stock
 
     public String getQuote() 
     {
-        return this.companyName + " (" + this.stockSymbol + ")" + "\n" 
+        String message = this.companyName + " (" + this.stockSymbol + ")" + "\n" 
     + "Price: " + this.lastPrice + "  hi: " + this.hiPrice +  "  lo: " 
-                        + this.loPrice + "  vol: " + this.volume 
+                        + this.loPrice + "  vol: " + this.volume + "\n";
+        String ask = "Ask: none";
+        String bid = "Bid: none";
+        if ( sellOrders.peek() != null )
+        {
+            ask = "Ask: " + sellOrders.peek().getPrice() + " size: "
+                + sellOrders.peek().getShares();
+        }
+        if ( buyOrders.peek() != null )
+        {
+            bid = " Bid: " + buyOrders.peek().getPrice() + " size: "
+                + buyOrders.peek().getShares();
+        }
+        return message + ask + " " + bid;
+                        
     }
 
 

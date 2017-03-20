@@ -85,6 +85,11 @@ public class Brokerage implements Login
     {
         trader.receiveMessage( exchange.getQuote( symbol ) );
     }
+    
+    public void placeOrder(TradeOrder order) 
+    {
+        exchange.placeOrder(order);
+    }
 
 
     protected Map<String, Trader> getTraders()
