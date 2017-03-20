@@ -3,7 +3,15 @@ import java.util.*;
 
 
 /**
- * Represents a stock trader.
+ * 
+ * This is the Trader Class Creates a trader, has various functions that include
+ * getting the name, password send and receive messages, etc.
+ *
+ * @author Avinash Jain
+ * @version Mar 20, 2017
+ * @author Period: 5
+ * @author Assignment: JMCh19_SafeTrade
+ *
  */
 public class Trader implements Comparable<Trader>
 {
@@ -15,8 +23,6 @@ public class Trader implements Comparable<Trader>
 
     private Queue<String> mailbox;
 
-
-    // TODO complete class
     public Trader( Brokerage brokerage, String name, String pswd )
     {
         this.brokerage = brokerage;

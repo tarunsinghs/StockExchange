@@ -2,6 +2,7 @@ import java.util.*;
 import java.lang.reflect.*;
 import java.text.DecimalFormat;
 
+
 /**
  * Represents a stock in the SafeTrade project
  */
@@ -10,58 +11,87 @@ public class Stock
     public static DecimalFormat money = new DecimalFormat( "0.00" );
 
     private String stockSymbol;
+
     private String companyName;
+
     private double loPrice, hiPrice, lastPrice;
+
     private int volume;
+
     private PriorityQueue<TradeOrder> buyOrders, sellOrders;
 
-    // TODO complete class
 
-    
-    //
-    // The following are for test purposes only
-    //
-    
+    public Stock( String symbol, String name, Double price )
+    {
+        this.stockSymbol = symbol;
+        this.companyName = name;
+        this.lastPrice = price;
+        this.loPrice = price;
+        this.hiPrice = price;
+        this.volume = 0;
+        this.sellOrders = new PriorityQueue<TradeOrder>( 10,
+            new PriceComparator() );
+        this.buyOrders = new PriorityQueue<TradeOrder>( 10,
+            new PriceComparator( false ) );
+    }
+
+
+    public String getQuote() 
+    {
+        return this.companyName + " (" + this.stockSymbol + ")" + "\n" 
+    + "Price: " + this.lastPrice + "  hi: " + this.hiPrice +  "  lo: " 
+                        + this.loPrice + "  vol: " + this.volume 
+    }
+
+
     protected String getStockSymbol()
     {
         return stockSymbol;
     }
-    
+
+
     protected String getCompanyName()
     {
         return companyName;
     }
-    
+
+
     protected double getLoPrice()
     {
         return loPrice;
     }
-    
+
+
     protected double getHiPrice()
     {
         return hiPrice;
     }
 
+
     protected double getLastPrice()
     {
         return lastPrice;
     }
-    
+
+
     protected int getVolume()
     {
         return volume;
     }
 
+
     protected PriorityQueue<TradeOrder> getBuyOrders()
     {
         return buyOrders;
     }
-    
+
+
     protected PriorityQueue<TradeOrder> getSellOrders()
     {
         return sellOrders;
     }
-    
+
+
     /**
      * <p>
      * A generic toString implementation that uses reflection to print names and
