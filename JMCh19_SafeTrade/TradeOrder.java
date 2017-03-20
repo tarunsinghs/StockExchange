@@ -4,6 +4,12 @@ import java.lang.reflect.*;
 /**
  * Represents a buy or sell order for trading a given number of shares of a
  * specified stock.
+ * 
+ * @author Andrea Pan
+ * @version Mar 20, 2017
+ * @author Period: 5
+ * @author Assignment: JMCh19_SafeTrade
+ * 
  */
 public class TradeOrder
 {
