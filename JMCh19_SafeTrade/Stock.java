@@ -4,7 +4,15 @@ import java.text.DecimalFormat;
 
 
 /**
- * Represents a stock in the SafeTrade project
+ * 
+ *  Stock class in StockExchange project
+ *  Creates a stock object, with various functions and methods
+ *
+ *  @author  Avinash Jain
+ *  @version Mar 20, 2017
+ *  @author  Period: 5
+ *  @author  Assignment: JMCh19_SafeTrade
+ *
  */
 public class Stock
 {

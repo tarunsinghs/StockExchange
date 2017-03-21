@@ -14,6 +14,7 @@ public class StockExchange
 
 
     // TODO complete class
+    // Susan is working on this
     
     public StockExchange()
     {
