@@ -179,16 +179,123 @@ public class JUSafeTradeTest
 
     //  --Test PriceComparator
     
-    // TODO your tests here
-    
+    @Test
+    public void priceComparatorConstructor1()
+    {
+        PriceComparator compare = new PriceComparator();
+        assertNotNull( compare );
+    }
+    @Test
+    public void priceComparatorConstructor2()
+    {
+        PriceComparator compare = new PriceComparator( false );
+        assertNotNull( compare );
+    }
+    @Test
+    public void priceComparatorCompare()
+    {
+        TradeOrder test1 = new TradeOrder( null, symbol, buyOrder, !marketOrder, numShares, 200 );
+        TradeOrder test2 = new TradeOrder( null, symbol, buyOrder, !marketOrder, numShares, 150 );
+        PriceComparator compare = new PriceComparator( false );
+        assertEquals( "<< PriceComparator: compare(" + test1.getPrice() + ", " + test2.getPrice() + ") should be "
+            + ( test1.getPrice() - test2.getPrice() ) * 150 + ">>", 2000, pc.compare( test2, test1 ) );
+
+    }
     
     // --Test Trader
     
-    // TODO your tests here
+    @Test
+    public void traderConstructor()
+    {
+        Trader test = new Trader( new Brokerage( new StockExchange() ), "testTrader", "1000" );
+        assertNotNull( test );
+    }
+
+    @Test
+    public void traderToString()
+    {
+        Trader test = new Trader( new Brokerage( new StockExchange() ), "testTrader", "1000" );
+        assertNotNull( t.toString() );
+    }
     
-    
+    @Test
+    public void traderCompareTo()
+    {
+        Trader test1 = new Trader( new Brokerage( new StockExchange() ), "testTrader1", "2000" );
+        Trader test2 = new Trader( new Brokerage( new StockExchange() ), "testTrader2", "2500" );
+        assertEquals( "<< Trader: " + test1.getName() + " compareTo ( " + test2.getName() + " ) should be "
+            + test1.getName().compareToIgnoreCase( test2.getName() ) + " >>", test1.compareTo( test2 ), -1 );
+    }
+    @Test
+    public void traderQuit()
+    {
+        Brokerage testBk = new Brokerage( new StockExchange() );
+        Trader test1 = new Trader( testBk, "testTrader1", "1000" );
+        testBk.addUser( "testTrader1", "Pass" );
+        testBk.login( "testTrader1", "pass" );
+        test1.quit();
+        assertEquals( testBk.getLoggedTraders().size(), 0 );
+    }
+    @Test
+    public void traderGetQuote()
+    {
+        StockExchange testSe = new StockExchange();
+        testSe.listStock( symbol, "Trader", price );
+        Trader testTrader = new Trader( new Brokerage( testSe ), "testTrader", "1000" );
+        testTrader.getQuote( symbol );
+        assertTrue( "<< Trader: getQuote( " + symbol + " ) should be " + testTrader.mailbox().peek() + " >>", testTrader.hasMessages() );
+    }
+    @Test
+    public void traderPlaceOrder()
+    {
+        StockExchange testSe = new StockExchange();
+        testSe.listStock( symbol, "Trader", price );
+        Trader testTrader = new Trader( new Brokerage( testSe ), "testTrader", "1000" );
+        testTrader.placeOrder( new TradeOrder( testTrader, symbol, buyOrder, marketOrder, numShares, price ) );
+        assertTrue( "<< Trader: placeOrder( " + symbol + " ) should be " + true + " >>", testTrader.hasMessages() );
+    }
+    @Test
+    public void traderGetName()
+    {
+        Trader testTrader = new Trader( new Brokerage( new StockExchange() ), "testTrader", "1000" );
+        assertEquals( "<< Trader: " + testTrader.getName() + " should be testTrader >>", testTrader.getName(), "testTrader" );
+    }
+    @Test
+    public void traderGetPassword()
+    {
+        Trader testTrader = new Trader( new Brokerage( new StockExchange() ), "testTrader", "1000" );
+        assertEquals( "<< Trader: " + testTrader.getPassword() + " should be 1000 >>", t.getPassword(), "1000" );
+    }
+    @Test
+    public void traderEquals()
+    {
+        Trader testTrader1 = new Trader( new Brokerage( new StockExchange() ), "testTrader1", "1000" );
+        Trader testTrader2 = new Trader( new Brokerage( new StockExchange() ), "testTrader2", "2000" );
+        assertFalse( "<< Trader: " + testTrader1.equals( testTrader2 ) + " should be " + false + " >>", testTrader1.equals( testTrader2 ) );
+    }
+    @Test
+    public void traderOpenWindow()
+    {
+        Trader testTrader1 = new Trader( new Brokerage( new StockExchange() ), "testTrader", "1000" );
+        testTrader1.receiveMessage( "Test Message" );
+        testTrader1.openWindow();
+        assertFalse( "<< Trader: " + testTrader1.mailbox().size() + " should be " + 0 + " >>", testTrader1.hasMessages() );
+    }
+    @Test
+    public void traderHasMessages()
+    {
+        Trader testTrader1 = new Trader( new Brokerage( new StockExchange() ), "testTrader1", "1000" );
+        assertTrue( "<< Trader: " + testTrader1.mailbox().size() + " should be " + 0 + " >>", testTrader1.mailbox().isEmpty() );
+    }
+    @Test
+    public void traderReceiveMessage()
+    {
+        Trader testTrader1 = new Trader( new Brokerage( new StockExchange() ), "testTrader1", "1000" );
+        t.receiveMessage( "Test Message" );
+        assertEquals( "<< Trader: " + testTrader1.mailbox().peek() + " should be " + "Test Message" + " >>", testTrader1.mailbox().remove(), "Test Message" );
+    }
     // --Test Brokerage
-    
+        
     // TODO your tests here
     
     
