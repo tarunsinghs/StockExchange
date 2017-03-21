@@ -36,11 +36,11 @@ public class Stock
     }
 
 
-    public String getQuote() 
+    public String getQuote()
     {
-        String message = this.companyName + " (" + this.stockSymbol + ")" + "\n" 
-    + "Price: " + this.lastPrice + "  hi: " + this.hiPrice +  "  lo: " 
-                        + this.loPrice + "  vol: " + this.volume + "\n";
+        String message = this.companyName + " (" + this.stockSymbol + ")" + "\n"
+            + "Price: " + this.lastPrice + "  hi: " + this.hiPrice + "  lo: "
+            + this.loPrice + "  vol: " + this.volume + "\n";
         String ask = "Ask: none";
         String bid = "Bid: none";
         if ( sellOrders.peek() != null )
@@ -54,7 +54,130 @@ public class Stock
                 + buyOrders.peek().getShares();
         }
         return message + ask + " " + bid;
-                        
+
+    }
+
+
+    public void placeOrder( TradeOrder order )
+    {
+        String message = "";
+        if ( order.isBuy() )
+        {
+            this.buyOrders.add( order );
+            message = "New Order: Buy " + order.getSymbol() + " ("
+                + this.companyName + ")" + "\n" + order.getShares()
+                + " shares at ";
+            if ( !order.isMarket() )
+            {
+                message += money.format( order.getPrice() );
+            }
+            else
+            {
+                message += "market";
+            }
+        }
+        else
+        {
+            this.sellOrders.add( order );
+            message = "New Order: Sell " + order.getSymbol() + " ("
+                + this.companyName + ")" + "\n" + order.getShares()
+                + " shares at ";
+            if ( !order.isMarket() )
+            {
+                message += money.format( order.getPrice() );
+            }
+            else
+            {
+                message += "market";
+            }
+        }
+        order.getTrader().receiveMessage( message );
+        executeOrders();
+
+    }
+
+
+    public void executeOrders()
+    {
+        if ( sellOrders.isEmpty() || buyOrders.isEmpty() )
+        {
+            return;
+        }
+
+        TradeOrder buy = buyOrders.peek();
+        TradeOrder sell = sellOrders.peek();
+
+        Trader buyer = buy.getTrader();
+        Trader seller = sell.getTrader();
+
+        double actualPrice = 0;
+
+        if ( buy.isLimit() && sell.isMarket() )
+        {
+            actualPrice = buy.getPrice();
+        }
+
+        else if ( buy.isMarket() && sell.isLimit() )
+        {
+            actualPrice = sell.getPrice();
+        }
+
+        else if ( buy.isMarket() && sell.isMarket() )
+        {
+            actualPrice = lastPrice;
+        }
+
+        if ( buy.isLimit() && sell.isLimit()
+            && buy.getPrice() >= sell.getPrice() )
+        {
+            actualPrice = sell.getPrice();
+        }
+
+        // sell price > buy price
+        else
+        {
+            return; // does nothing
+        }
+
+        int shares = Math.min( buy.getShares(), sell.getShares() );
+
+        buy.subtractShares( shares );
+        sell.subtractShares( shares );
+
+        if ( buy.getShares() == 0 )
+        {
+            buyOrders.remove( buy );
+        }
+
+        if ( sell.getShares() == 0 )
+        {
+            sellOrders.remove( sell );
+        }
+
+        if ( actualPrice < loPrice )
+        {
+            loPrice = actualPrice;
+        }
+
+        if ( actualPrice > hiPrice )
+        {
+            hiPrice = actualPrice;
+        }
+
+        volume += shares;
+        lastPrice = actualPrice;
+
+        buyer.receiveMessage( "You bought: " + shares + " " + stockSymbol
+            + " at " + money.format( actualPrice ) + " amt "
+            + money.format( shares * actualPrice ) );
+        seller.receiveMessage( "You sold: " + shares + " " + stockSymbol
+            + " at " + money.format( actualPrice ) + " amt "
+            + money.format( shares * actualPrice ) );
+
+        if ( !buyOrders.isEmpty() && !sellOrders.isEmpty() )
+        {
+            executeOrders();
+        }
     }
 
 
