@@ -14,7 +14,7 @@ public class StockExchange
 
 
     // TODO complete class
-    
+
     public StockExchange()
     {
         listedStocks = new HashMap<String, Stock>();
@@ -22,20 +22,35 @@ public class StockExchange
     }
 
 
-    public void listStock(String symbol, String name,
-        double price)
+    public void listStock( String symbol, String name, double price )
     {
-        listedStocks.put(symbol, new Stock(symbol, name, price));
+        listedStocks.put( symbol, new Stock( symbol, name, price ) );
     }
-    
-    public getQuote(String symbol)
+
+
+    public String getQuote( String symbol )
     {
-        
+        if ( symbol == null )
+            return "";
+        Stock s = listedStocks.get( symbol );
+        if ( s != null )
+            return s.getQuote();
+        return symbol + " no quote";
     }
-    
-    public void placeOrder(TradeOrder order)
+
+
+    public void placeOrder( TradeOrder order )
     {
-        stock.placeOrder(order);
+        if ( order == null )
+            return;
+        Stock s = listedStocks.get( order.getSymbol() );
+        if ( s != null )
+        {
+            s.placeOrder( order );  
+            return;
+        }
+        String str = order.getSymbol() + " not found";
+        order.getTrader().receiveMessage( str );
     }
 
 
