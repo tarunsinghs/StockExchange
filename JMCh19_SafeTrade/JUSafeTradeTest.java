@@ -296,9 +296,119 @@ public class JUSafeTradeTest
     }
     // --Test Brokerage
         
-    // TODO your tests here
-    
-    
+    @Test
+    public void brokerageConstructer()
+    {
+        StockExchange test1 = new StockExchange();
+        test1.listStock("GGGL","Giggle.com",10.00)
+        Brokerage test2 = new Brokerage( test1 );
+        String str = b.toString();
+        assetTrue("Invalid Constructor",str.contains("brokerage["));
+    }
+    @Test 
+    public void brokerageToString()
+    {
+        StockExchange test1 = new StockExchange();
+        test1.listStock("GGGL","Giggle.com",10.00);
+        Brokerage test2 = new Brokerage(test1);
+        assertNotNull(b.toString());
+    }
+    //HELP MEH
+    @Test
+    public void brokerageAddUser()
+    {
+        StockExchange test1 = new StockExchange();
+        test1.listStock("GGGL","Giggle.com",10.00);
+        Brokerage test2 = new Brokerage(test1);
+        assertTrue("Invalid Name", test2.addUser("name","password")==-1);
+        assertTrue("Invalid Name", test2.addUser("username","name")==-2);
+        assertTrue("Invalid Name", test2.addUser("username","traderUsers")==-2);
+        assertTrue("Invalid Name", test2.addUser("username","password")==0 && test2.getTraders().containsKey("username"));
+        assertTrue("Invalid Name", test2.addUser("username","password")==-3);
+    }
+    @Test
+    public void brokerageGetQuote()
+
+    {
+
+        StockExchange test1 = new StockExchange();
+        test1.listStock( "GGGL", "Giggle.com", 10.00 );
+        Brokerage test2 = new Brokerage( test1 );
+        Trader testTrader = new Trader( test2, name, password );
+        test2.getQuote( symbol, trader );
+        assertTrue( "<< Invalid Brokerage getQuote >>", testTrader.hasMessages() );
+
+    }
+
+
+    @Test
+    public void brokerageLogin()
+
+    {
+        StockExchange testSe = new StockExchange();
+        testSe.listStock( "GGGL", "Giggle.com", 10.00 );
+        Brokerage testBroker = new Brokerage( testSe );
+
+        String n = "java";
+        String p = "trader";
+        testBroker.addUser( n, p );
+        assertTrue( "<< Invalid brokerage login >>",
+            testBroker.login( "user", p ) == -1 );
+        assertTrue( "<< Invalid brokerage login >>",
+            testBroker.login( n, "Invalid" ) == -2 );
+        assertTrue( "<< Invalid brokerage login >>",
+            testBroker.login( n, p ) == 0
+                && testBroker.getLoggedTraders()
+                    .contains( testBroker.getTraders().get( n ) )
+                && !testBroker.getTraders().get( n ).hasMessages() );
+
+        testBroker.login( n, p );
+
+        assertTrue( "<< invalid brokerage login >>",
+            testBroker.login( n, p ) == -3 );
+
+    }
+
+
+    @Test
+    public void brokerageLogout()
+
+    {
+        StockExchange testSe = new StockExchange();
+        testSe.listStock( "GGGL", "Giggle.com", 10.00 );
+        Brokerage testBroker = new Brokerage( testSe );
+
+        testBroker.addUser( "java", "user" );
+        testBroker.login( "java", "user" );
+        testBroker.logout( testBroker.getTraders().get( "java" ) );
+        assertFalse( "<< Invalid brokerage logout >>", testBroker.getLoggedTraders()
+            .contains( testBroker.getTraders().get( "java" ) ) );
+
+    }
+
+
+    @Test
+    public void brokeragePlaceOrder()
+
+    {
+        StockExchange testSe = new StockExchange();
+        testSe.listStock( "GGGL", "Giggle.com", 10.00 );
+        Brokerage testBroker = new Brokerage( testSe );
+        Trader trader = new Trader( testBroker, name, password );
+
+        TradeOrder order = new TradeOrder( trader,
+            symbol,
+            true,
+            false,
+            10,
+            10.0 );
+        testBroker.placeOrder( order );
+        assertTrue( "<< Invalid Brokerage getQuote >>", trader.hasMessages() );
+        trader.openWindow();
+        testBroker.placeOrder( order );
+        assertFalse( "<< Invalid Brokerage getQuote >>", trader.hasMessages() );
+
+    }
     // --Test StockExchange
     
     // TODO your tests here
