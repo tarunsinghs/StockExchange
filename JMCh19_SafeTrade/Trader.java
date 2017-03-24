@@ -53,7 +53,7 @@ public class Trader implements Comparable<Trader>
 
     public boolean equals( Object other )
     {
-        if ( other instanceof Trader )
+        if ( other instanceof Trader)
         {
             throw new ClassCastException();
         }
