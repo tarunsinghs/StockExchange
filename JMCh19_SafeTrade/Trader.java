@@ -29,6 +29,7 @@ public class Trader implements Comparable<Trader>
         this.brokerage = brokerage;
         screenName = name;
         password = pswd;
+        mailbox = new PriorityQueue<String>();
     }
 
 
@@ -53,23 +54,8 @@ public class Trader implements Comparable<Trader>
 
     public boolean equals( Object other )
     {
-        if ( other instanceof Trader)
-        {
-            throw new ClassCastException();
-        }
-        else
-        {
-            if ( this.compareTo( (Trader)other ) == 0 )
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+        return compareTo( (Trader)other ) == 0;
     }
-
 
     public void openWindow()
     {
@@ -92,13 +78,11 @@ public class Trader implements Comparable<Trader>
     public void receiveMessage( String msg )
     {
         mailbox.add( msg );
-
         if ( myWindow != null )
         {
             while ( mailbox.peek() != null )
             {
-                String mg = mailbox.remove();
-                myWindow.showMessage( mg );
+                myWindow.showMessage( mailbox.remove() );
             }
         }
 
@@ -127,7 +111,7 @@ public class Trader implements Comparable<Trader>
     }
 
 
-    //
+    //  
     // The following are for test purposes only
     //
     protected Queue<String> mailbox()

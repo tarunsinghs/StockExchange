@@ -5,13 +5,13 @@ import java.text.DecimalFormat;
 
 /**
  * 
- *  Stock class in StockExchange project
- *  Creates a stock object, with various functions and methods
+ * Stock class in StockExchange project Creates a stock object, with various
+ * functions and methods
  *
- *  @author  Avinash Jain
- *  @version Mar 20, 2017
- *  @author  Period: 5
- *  @author  Assignment: JMCh19_SafeTrade
+ * @author Avinash Jain
+ * @version Mar 20, 2017
+ * @author Period: 5
+ * @author Assignment: JMCh19_SafeTrade
  *
  */
 public class Stock
@@ -46,9 +46,9 @@ public class Stock
 
     public String getQuote()
     {
-        String message = this.companyName + " (" + this.stockSymbol + ")" + "\n"
-            + "Price: " + this.lastPrice + "  hi: " + this.hiPrice + "  lo: "
-            + this.loPrice + "  vol: " + this.volume + "\n";
+        String quote = companyName + " (" + stockSymbol + ")" + "\n" + "Price: "
+            + lastPrice + " hi: " + hiPrice + " lo: " + loPrice + " vol: "
+            + volume + "\n";
         String ask = "Ask: none";
         String bid = "Bid: none";
         if ( sellOrders.peek() != null )
@@ -58,10 +58,10 @@ public class Stock
         }
         if ( buyOrders.peek() != null )
         {
-            bid = " Bid: " + buyOrders.peek().getPrice() + " size: "
+            bid = "Bid: " + buyOrders.peek().getPrice() + " size: "
                 + buyOrders.peek().getShares();
         }
-        return message + ask + " " + bid;
+        return quote + ask + " " + bid;
 
     }
 

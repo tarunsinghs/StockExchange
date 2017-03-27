@@ -13,9 +13,6 @@ public class StockExchange
     private Map<String, Stock> listedStocks;
 
 
-    // TODO complete class
-
-
     public StockExchange()
     {
         listedStocks = new HashMap<String, Stock>();
@@ -31,12 +28,7 @@ public class StockExchange
 
     public String getQuote( String symbol )
     {
-        if ( symbol == null )
-            return "";
-        Stock s = listedStocks.get( symbol );
-        if ( s != null )
-            return s.getQuote();
-        return symbol + " no quote";
+        return listedStocks.get(symbol).getQuote();
     }
 
 

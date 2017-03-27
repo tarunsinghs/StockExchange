@@ -22,26 +22,20 @@ public class Brokerage implements Login
 
     public int addUser( String name, String password )
     {
-        for ( String t : traders.keySet() )
-        {
-            if ( t == name )
-            {
-                return -3;
-            }
-        }
-        if ( name.length() > 3 && name.length() < 11 )
+        if ( name.length() > 10 || name.length() < 4 )
         {
             return -1;
         }
-        else if ( password.length() > 1 && password.length() < 11 )
+        else if ( password.length() > 10 || password.length() < 2 )
         {
             return -2;
         }
-        else
+        else if ( this.traders.get( name ) != null )
         {
-            traders.put( name, new Trader( this, name, password ) );
-            return 0;
+            return -3;
         }
+        traders.put( name, new Trader( this, name, password ) );
+        return 0;
     }
 
 
@@ -53,7 +47,7 @@ public class Brokerage implements Login
             return -1;
         }
         Trader t = traders.get( name );
-        if ( t.getPassword().equals( password ))
+        if ( t.getPassword().equals( password ) )
         {
             if ( loggedTraders.contains( t ) )
             {
@@ -85,10 +79,11 @@ public class Brokerage implements Login
     {
         trader.receiveMessage( exchange.getQuote( symbol ) );
     }
-    
-    public void placeOrder(TradeOrder order) 
+
+
+    public void placeOrder( TradeOrder order )
     {
-        exchange.placeOrder(order);
+        exchange.placeOrder( order );
     }
 
 
