@@ -25,7 +25,15 @@ public class TradeOrder
 
     private double price;
 
-
+/** 
+ * Create trade order instance
+ * @param trader trader 
+ * @param symbol symbol
+ * @param buyOrder buyORder
+ * @param marketOrder marketOrder
+ * @param numShares numShares
+ * @param price price
+ */
     public TradeOrder(
         Trader trader,
         String symbol,
@@ -43,55 +51,89 @@ public class TradeOrder
 
     }
 
-
+/**
+ * 
+ * Gets the trader
+ * @return the trader
+ */
     public Trader getTrader()
     {
         return trader;
     }
 
-
+/**
+ * 
+ * Gets the symbol
+ * @return returns the symbol
+ */
     public String getSymbol()
     {
         return symbol;
     }
 
-
+/**
+ * 
+ * checks to see if buy works
+ * @return buy boolean
+ */
     public boolean isBuy()
     {
         return buyOrder == true;
     }
 
-
+/**
+ * 
+ * Checks to see if order is sell
+ * @return true or false
+ */
     public boolean isSell()
     {
         return buyOrder == false;
     }
 
-
+/**
+ * CHecks to see if order is market
+ * @return true or false
+ */
     public boolean isMarket()
     {
         return marketOrder == true;
     }
 
-
+/**
+ * Checks to see if order is limit
+ * @return true or false
+ */
     public boolean isLimit()
     {
         return marketOrder == false;
     }
 
-
+/**
+ * 
+ * Gets the shares of the stock
+ * @return int value
+ */
     public int getShares()
     {
         return numShares;
     }
 
-
+/**
+ * 
+ * Gets the price of the stock
+ * @return double stock
+ */
     public double getPrice()
     {
         return price;
     }
 
-
+/**
+ * 
+ * Subtracts shares
+ * @param shares shares
+ */
     public void subtractShares( int shares )
     {
         if ( shares > numShares )
