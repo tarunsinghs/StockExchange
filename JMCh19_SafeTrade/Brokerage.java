@@ -17,25 +17,30 @@ public class Brokerage implements Login
     public Brokerage( StockExchange exchange )
     {
         this.exchange = exchange;
+        traders = new TreeMap<String, Trader>();
+        loggedTraders = new TreeSet<Trader>();
     }
 
-
+    @Override 
     public int addUser( String name, String password )
     {
         if ( name.length() > 10 || name.length() < 4 )
         {
             return -1;
         }
-        else if ( password.length() > 10 || password.length() < 2 )
+        if ( password.length() > 10 || password.length() < 2 )
         {
             return -2;
         }
-        else if ( this.traders.get( name ) != null )
+        if ( this.traders.containsKey( name ) )
         {
             return -3;
         }
-        traders.put( name, new Trader( this, name, password ) );
-        return 0;
+        else
+        {
+            traders.put( name, new Trader( this, name, password ) );
+            return 0;
+        }
     }
 
 

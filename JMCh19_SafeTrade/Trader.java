@@ -35,13 +35,13 @@ public class Trader implements Comparable<Trader>
 
     public String getName()
     {
-        return screenName;
+        return this.screenName;
     }
 
 
     public String getPassword()
     {
-        return password;
+        return this.password;
     }
 
 

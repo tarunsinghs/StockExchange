@@ -64,19 +64,19 @@ public class TradeOrder
 
     public boolean isSell()
     {
-        return buyOrder = false;
+        return buyOrder == false;
     }
 
 
     public boolean isMarket()
     {
-        return marketOrder = true;
+        return marketOrder == true;
     }
 
 
     public boolean isLimit()
     {
-        return marketOrder = false;
+        return marketOrder == false;
     }
 
 
