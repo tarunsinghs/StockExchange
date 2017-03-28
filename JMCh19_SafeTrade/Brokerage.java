@@ -3,7 +3,15 @@ import java.util.*;
 
 
 /**
- * Represents a brokerage.
+ * 
+ * This is the brokerage class This has all the methods of the brokerage class
+ * that allows us to use it in the stock exchange application
+ *
+ * @author Avinash
+ * @version Mar 28, 2017
+ * @author Period: 5
+ * @author Assignment: JMCh19_SafeTrade
+ *
  */
 public class Brokerage implements Login
 {
@@ -14,6 +22,12 @@ public class Brokerage implements Login
     private StockExchange exchange;
 
 
+    /**
+     * Creates Brokerage
+     * 
+     * @param exchange
+     *            the exchange variable
+     */
     public Brokerage( StockExchange exchange )
     {
         this.exchange = exchange;
@@ -21,7 +35,17 @@ public class Brokerage implements Login
         loggedTraders = new TreeSet<Trader>();
     }
 
-    @Override 
+
+    /**
+     * Adds a user to loggedTraders
+     * 
+     * @param name
+     *            the user's name
+     * @param password
+     *            the user's password
+     * @return int what to return
+     * 
+     */
     public int addUser( String name, String password )
     {
         if ( name.length() > 10 || name.length() < 4 )
@@ -44,6 +68,15 @@ public class Brokerage implements Login
     }
 
 
+    /**
+     * Logs in the user
+     * 
+     * @param name
+     *            the user's name
+     * @param password
+     *            the user's password
+     * @return int what to return
+     */
     public int login( String name, String password )
     {
 
@@ -74,18 +107,41 @@ public class Brokerage implements Login
     }
 
 
+    /**
+     * 
+     * Logs out the trader
+     * 
+     * @param trader
+     *            which trader to logout
+     */
     public void logout( Trader trader )
     {
         loggedTraders.remove( trader );
     }
 
 
+    /**
+     * 
+     * Gets the quote from a given symbol and trader
+     * 
+     * @param symbol
+     *            the symbol
+     * @param trader
+     *            the trader
+     */
     public void getQuote( String symbol, Trader trader )
     {
         trader.receiveMessage( exchange.getQuote( symbol ) );
     }
 
 
+    /**
+     * 
+     * Places an order
+     * 
+     * @param order
+     *            the order
+     */
     public void placeOrder( TradeOrder order )
     {
         exchange.placeOrder( order );
