@@ -64,13 +64,42 @@ public class PriceComparator implements java.util.Comparator<TradeOrder>
         {
             if ( ascending == true )
             {
-                return (int)( ( order1.getPrice() - order2.getPrice() ) );
+                return (int)( ( order1.getPrice() - order2.getPrice() ) * 100 );
             }
             else
             {
-                return (int)( ( order2.getPrice() - order1.getPrice() ) );
+                return (int)( ( order2.getPrice() - order1.getPrice() ) * 100 );
             }
         }
+    }
+
+/**
+ * To string method
+ * @return the string version
+ */
+    public String toString()
+    {
+        String str = this.getClass().getName() + "[";
+        String separator = "";
+
+        Field[] fields = this.getClass().getDeclaredFields();
+
+        for ( Field field : fields )
+        {
+            try
+            {
+                str += separator + field.getType().getName() + " "
+                    + field.getName() + ":" + field.get( this );
+            }
+            catch ( IllegalAccessException ex )
+            {
+                System.out.println( ex );
+            }
+
+            separator = ", ";
+        }
+
+        return str + "]";
     }
 
 }

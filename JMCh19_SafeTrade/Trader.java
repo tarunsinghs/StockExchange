@@ -24,6 +24,16 @@ public class Trader implements Comparable<Trader>
     private Queue<String> mailbox;
 
 
+    /**
+     * Creates an instance of trader
+     * 
+     * @param brokerage
+     *            the brokerage
+     * @param name
+     *            the name
+     * @param pswd
+     *            the password
+     */
     public Trader( Brokerage brokerage, String name, String pswd )
     {
         this.brokerage = brokerage;
@@ -33,30 +43,57 @@ public class Trader implements Comparable<Trader>
     }
 
 
+    /**
+     * 
+     * Gets the name of the trader
+     * 
+     * @return the name
+     */
     public String getName()
     {
         return this.screenName;
     }
 
 
+    /**
+     * 
+     * Gets the password of the trader
+     * 
+     * @return the password
+     */
     public String getPassword()
     {
         return this.password;
     }
 
 
+    /**
+     * Compare to function
+     * 
+     * @param other
+     *            the other trader
+     * @return int the num
+     */
     public int compareTo( Trader other )
     {
         int result = screenName.compareToIgnoreCase( other.getName() );
         return result;
     }
 
-
+/**
+ * Equals function
+ * @param other the other trader
+ * @return boolean true or false
+ */
     public boolean equals( Object other )
     {
         return compareTo( (Trader)other ) == 0;
     }
 
+/**
+ * 
+ * Function called to open the window
+ */
     public void openWindow()
     {
         myWindow = new TraderWindow( this );
@@ -68,13 +105,21 @@ public class Trader implements Comparable<Trader>
         }
     }
 
-
+/**
+ * Check to see if mailbox has messages
+ * 
+ * @return boolean true or false
+ */
     public boolean hasMessages()
     {
         return ( mailbox.peek() != null );
     }
 
-
+/**
+ * 
+ * Gets the message and displays it to user
+ * @param msg the msg to be displayed
+ */
     public void receiveMessage( String msg )
     {
         mailbox.add( msg );
@@ -88,22 +133,31 @@ public class Trader implements Comparable<Trader>
 
     }
 
-
+/**
+ * 
+ * Get quote of stock
+ * @param symbol the stock symbol
+ */
     public void getQuote( String symbol )
     {
         brokerage.getQuote( symbol, this );
 
     }
 
-
+/**
+ * 
+ * Place order function
+ * @param order the order
+ */
     public void placeOrder( TradeOrder order )
     {
-        brokerage.placeOrder( order ); // this error will go away when
-                                       // 'placeOrder' is written in the
-                                       // Brokerage class
+        brokerage.placeOrder( order ); 
     }
 
-
+/**
+ * 
+ * Quits the application
+ */
     public void quit()
     {
         brokerage.logout( this );
@@ -111,7 +165,7 @@ public class Trader implements Comparable<Trader>
     }
 
 
-    //  
+    //
     // The following are for test purposes only
     //
     protected Queue<String> mailbox()

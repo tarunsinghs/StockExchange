@@ -243,21 +243,35 @@ public class JUSafeTradeTest
     }
 
 
+    @Test
+    public void traderWindowToStringTest()
+    {
+        TraderWindow tw = new TraderWindow( null );
+        assertNotNull( tw.toString() );
+    }
+
+
     // --Test PriceComparator
 
     @Test
-    public void priceComparatorConstructor1()
+    public void priceComparatorConstructor()
     {
-        PriceComparator compare = new PriceComparator();
-        assertNotNull( compare );
+        PriceComparator pc = new PriceComparator();
+        String toStr = pc.toString();
+
+        assertTrue( "<< Invalid PriceComparator Constructor >>",
+            toStr.contains( "boolean ascending:true" ) );
     }
 
 
     @Test
-    public void priceComparatorConstructor2()
+    public void priceComparatorConstructorWithBoolean()
     {
-        PriceComparator compare = new PriceComparator( false );
-        assertNotNull( compare );
+        PriceComparator pc = new PriceComparator( false );
+        String toStr = pc.toString();
+
+        assertTrue( "<< Invalid PriceComparator Constructor >>",
+            toStr.contains( "boolean ascending:false" ) );
     }
 
 
@@ -315,6 +329,13 @@ public class JUSafeTradeTest
             pc2.compare( order3, order4 ),
             (int)( ( price2 - price ) * 100 ) );
 
+    }
+    
+    @Test
+    public void priceComparatortoStringTest()
+    {
+        PriceComparator pc = new PriceComparator();
+        assertNotNull( pc.toString() );
     }
 
 
