@@ -3,16 +3,22 @@ import java.util.*;
 
 
 /**
- * Represents a stock exchange. A <code>StockExchange</code> keeps a
- * <code>HashMap</code> of stocks, keyed by a stock symbol. It has methods to
- * list a new stock, request a quote for a given stock symbol, and to place a
- * specified trade order.
+ * This is the stock exchange class Creates an instance of the stock exchange
+ * class for our application
+ *
+ * @author Avinash Jain
+ * @version Mar 28, 2017
+ * @author Period: 5
+ * @author Assignment: JMCh19_SafeTrade
  */
 public class StockExchange
 {
     private Map<String, Stock> listedStocks;
 
 
+    /**
+     * Creates an instance of the stock exchange
+     */
     public StockExchange()
     {
         listedStocks = new HashMap<String, Stock>();
@@ -20,18 +26,44 @@ public class StockExchange
     }
 
 
+    /**
+     * 
+     * Returns all the stocks
+     * 
+     * @param symbol
+     *            the symbol
+     * @param name
+     *            the name
+     * @param price
+     *            the price
+     */
     public void listStock( String symbol, String name, double price )
     {
         listedStocks.put( symbol, new Stock( symbol, name, price ) );
     }
 
 
+    /**
+     * 
+     * Gets the quote form a symbol
+     * 
+     * @param symbol
+     *            this is the symbol
+     * @return a quote
+     */
     public String getQuote( String symbol )
     {
-        return listedStocks.get(symbol).getQuote();
+        return listedStocks.get( symbol ).getQuote();
     }
 
 
+    /**
+     * 
+     * Places an order in the exchange
+     * 
+     * @param order
+     *            this is the order
+     */
     public void placeOrder( TradeOrder order )
     {
         if ( order == null )
@@ -39,7 +71,7 @@ public class StockExchange
         Stock s = listedStocks.get( order.getSymbol() );
         if ( s != null )
         {
-            s.placeOrder( order );  
+            s.placeOrder( order );
             return;
         }
         String str = order.getSymbol() + " not found";

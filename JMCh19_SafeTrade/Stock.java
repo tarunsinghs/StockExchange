@@ -29,6 +29,17 @@ public class Stock
     private PriorityQueue<TradeOrder> buyOrders, sellOrders;
 
 
+    /**
+     * Creates an instance of a stock
+     * 
+     * @param symbol
+     *            the stock symbol
+     * @param name
+     *            the stock name
+     * @param price
+     *            the stock price
+     * 
+     */
     public Stock( String symbol, String name, Double price )
     {
         this.stockSymbol = symbol;
@@ -44,6 +55,12 @@ public class Stock
     }
 
 
+    /**
+     * 
+     * Gets the quote of the stock
+     * 
+     * @return the quote
+     */
     public String getQuote()
     {
         String quote = companyName + " (" + stockSymbol + ")" + "\n" + "Price: "
@@ -66,6 +83,13 @@ public class Stock
     }
 
 
+    /**
+     * 
+     * Places the order of the stock
+     * 
+     * @param order
+     *            takes in the order
+     */
     public void placeOrder( TradeOrder order )
     {
         String message = "";
@@ -105,6 +129,10 @@ public class Stock
     }
 
 
+    /**
+     * 
+     * Executes the order of the class
+     */
     public void executeOrders()
     {
         if ( sellOrders.isEmpty() || buyOrders.isEmpty() )
