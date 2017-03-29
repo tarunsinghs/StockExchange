@@ -92,42 +92,37 @@ public class Stock
      */
     public void placeOrder( TradeOrder order )
     {
-        String str = "New Order: ";
-        if ( order == null )
+        String str = "New order: ";
+
+        if ( order == null ) 
         {
             return;
         }
+
         if ( order.isBuy() )
         {
-            buyOrders.add( order );
-            str += "Buy " + order.getSymbol() + " (" + this.companyName + 
-                            ")" + "\n" + order.getShares() + " shares at ";
-            if ( !order.isMarket() )
-            {
-                str += money.format(order.getPrice());
-            }
-            else
-            {
-                str += "market";
-            }
+            buyOrders.add( order ); 
+            str += "Buy ";
         }
         else
         {
-            sellOrders.add( order );
-            str += "Sell " + order.getSymbol() + " (" + this.companyName + ") "
-                + "\n" + order.getShares() + " shares at ";
-            if ( !order.isMarket() )
-            {
-                str += money.format(order.getPrice());
-            }
-            else
-            {
-                str += "market";
-            }
+            sellOrders.add( order ); 
+            str += "Sell ";
         }
 
-        order.getTrader().receiveMessage( str );
-        executeOrders();
+        str += order.getSymbol() + " (" + this.companyName + ")" + "\n" + order.getShares() + " shares at ";
+
+        if ( !order.isMarket() )
+        {
+            str += money.format( order.getPrice() ); 
+        }
+        else
+        {
+            str += "market";
+        }
+
+        order.getTrader().receiveMessage( str ); 
+        executeOrders(); 
     }
 
 
@@ -135,54 +130,54 @@ public class Stock
      * 
      * Executes the order of the class
      */
-    public void executeOrders()
+    protected void executeOrders()
     {
-        if ( sellOrders.isEmpty() || buyOrders.isEmpty() )
+        if ( buyOrders.isEmpty() || sellOrders.isEmpty() )
         {
             return;
         }
 
+        /* 1. check the top sell order and the top buy order */
         TradeOrder buy = buyOrders.peek();
         TradeOrder sell = sellOrders.peek();
-
         Trader buyer = buy.getTrader();
         Trader seller = sell.getTrader();
 
-        double actualPrice = 0;
+        /* determine price first */
+        double price = 0;
 
-        if ( buy.isLimit() && sell.isMarket() )
+        if ( buy.isLimit() && sell.isLimit() && buy.getPrice() >= sell.getPrice() )
         {
-            actualPrice = buy.getPrice();
+            price = sell.getPrice();
         }
-
+        else if ( buy.isLimit() && sell.isMarket() )
+        {
+            price = buy.getPrice(); // use buyer's price
+        }
         else if ( buy.isMarket() && sell.isLimit() )
         {
-            actualPrice = sell.getPrice();
+            price = sell.getPrice(); // seller's price
         }
-
         else if ( buy.isMarket() && sell.isMarket() )
-        {
-            actualPrice = lastPrice;
+        { // if both market, use last price.
+            price = lastPrice;
         }
-
-        if ( buy.isLimit() && sell.isLimit()
-            && buy.getPrice() >= sell.getPrice() )
-        {
-            actualPrice = sell.getPrice();
-        }
-
-        // sell price > buy price
-        else
+        else // sell price > buy price
         {
             return; // does nothing
         }
 
-        int shares = Math.min( buy.getShares(), sell.getShares() );
+        /*
+         * 2. Figures out how many shares can be traded, which is the smallest
+         * of the numbers of shares in the two orders.
+         */
+        int nShares = Math.min( buy.getShares(), sell.getShares() );
 
-        buy.subtractShares( shares );
-        sell.subtractShares( shares );
+        /* 3. Subtracts the traded number of shares from each order */
+        buy.subtractShares( nShares );
+        sell.subtractShares( nShares );
 
-        if ( buy.getShares() == 0 )
+        if ( buy.getShares() == 0 ) // no more buying order,
         {
             buyOrders.remove( buy );
         }
@@ -192,26 +187,33 @@ public class Stock
             sellOrders.remove( sell );
         }
 
-        if ( actualPrice < loPrice )
+        /* 4. Updates the day's low price, high price, and volume. */
+        if ( price < loPrice ) // traded at lower price, update loPrice.
         {
-            loPrice = actualPrice;
+            loPrice = price;
         }
 
-        if ( actualPrice > hiPrice )
+        if ( price > hiPrice )
         {
-            hiPrice = actualPrice;
+            hiPrice = price; // update high price.
         }
 
-        volume += shares;
-        lastPrice = actualPrice;
+        volume += nShares;
+        lastPrice = price;
 
-        buyer.receiveMessage( "You bought: " + shares + " " + stockSymbol
-            + " at " + money.format( actualPrice ) + " amt "
-            + money.format( shares * actualPrice ) );
-        seller.receiveMessage( "You sold: " + shares + " " + stockSymbol
-            + " at " + money.format( actualPrice ) + " amt "
-            + money.format( shares * actualPrice ) );
+        /*
+         * 5. Sends a message to each of the two traders involved in the
+         * transaction.
+         */
+        buyer.receiveMessage( "You bought: " + nShares + " " + stockSymbol + " at " + money.format( price ) + " amt "
+            + money.format( nShares * price ) );
+        seller.receiveMessage( "You sold: " + nShares + " " + stockSymbol + " at " + money.format( price ) + " amt "
+            + money.format( nShares * price ) );
 
+        /*
+         * 6. Repeats steps 1-5 for as long as possible, that is as long as
+         * there is any movement in BOTH buy / sell order queues.
+         */
         if ( !buyOrders.isEmpty() && !sellOrders.isEmpty() )
         {
             executeOrders();

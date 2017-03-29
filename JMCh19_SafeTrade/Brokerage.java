@@ -7,7 +7,7 @@ import java.util.*;
  * This is the brokerage class This has all the methods of the brokerage class
  * that allows us to use it in the stock exchange application
  *
- * @author Avinash
+ * @author Avinash Jain
  * @version Mar 28, 2017
  * @author Period: 5
  * @author Assignment: JMCh19_SafeTrade
@@ -144,6 +144,8 @@ public class Brokerage implements Login
      */
     public void placeOrder( TradeOrder order )
     {
+        if ( order == null )
+            return;
         exchange.placeOrder( order );
     }
 

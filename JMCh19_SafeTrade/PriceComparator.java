@@ -6,7 +6,7 @@ import java.lang.reflect.Field;
  * Price Comparator Class A price comparator class that creates the comparator
  * we use in our priority queues
  *
- * @author Avinash
+ * @author Avinash Jain
  * @version Mar 28, 2017
  * @author Period: 5
  * @author Assignment: JMCh19_SafeTrade
@@ -49,27 +49,17 @@ public class PriceComparator implements java.util.Comparator<TradeOrder>
     public int compare( TradeOrder order1, TradeOrder order2 )
     {
         if ( order1.isMarket() && order2.isMarket() )
-        {
             return 0;
-        }
-        if ( order1.isMarket() && order2.isLimit() )
-        {
+        else if ( order1.isMarket() && order2.isLimit() ) 
             return -1;
-        }
-        if ( order1.isLimit() && order2.isMarket() )
-        {
+        else if ( order1.isLimit() && order2.isMarket() ) 
             return 1;
-        }
-        else
-        {
+        else 
+        { 
             if ( ascending == true )
-            {
                 return (int)( ( order1.getPrice() - order2.getPrice() ) * 100 );
-            }
             else
-            {
                 return (int)( ( order2.getPrice() - order1.getPrice() ) * 100 );
-            }
         }
     }
 

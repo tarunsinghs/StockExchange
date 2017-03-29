@@ -37,9 +37,9 @@ public class Trader implements Comparable<Trader>
     public Trader( Brokerage brokerage, String name, String pswd )
     {
         this.brokerage = brokerage;
-        screenName = name;
-        password = pswd;
-        mailbox = new PriorityQueue<String>();
+        this.screenName = name;
+        this.password = pswd;
+        this.mailbox = new PriorityQueue<String>();
     }
 
 
@@ -80,20 +80,24 @@ public class Trader implements Comparable<Trader>
         return result;
     }
 
-/**
- * Equals function
- * @param other the other trader
- * @return boolean true or false
- */
+
+    /**
+     * Equals function
+     * 
+     * @param other
+     *            the other trader
+     * @return boolean true or false
+     */
     public boolean equals( Object other )
     {
         return compareTo( (Trader)other ) == 0;
     }
 
-/**
- * 
- * Function called to open the window
- */
+
+    /**
+     * 
+     * Function called to open the window
+     */
     public void openWindow()
     {
         myWindow = new TraderWindow( this );
@@ -105,59 +109,72 @@ public class Trader implements Comparable<Trader>
         }
     }
 
-/**
- * Check to see if mailbox has messages
- * 
- * @return boolean true or false
- */
+
+    /**
+     * Check to see if mailbox has messages
+     * 
+     * @return boolean true or false
+     */
     public boolean hasMessages()
     {
         return ( mailbox.peek() != null );
     }
 
-/**
- * 
- * Gets the message and displays it to user
- * @param msg the msg to be displayed
- */
-    public void receiveMessage( String msg )
+
+    /**
+     * 
+     * Gets the message and displays it to user
+     * 
+     * @param msg
+     *            the msg to be displayed
+     */
+    public void receiveMessage( java.lang.String msg )
     {
         mailbox.add( msg );
         if ( myWindow != null )
         {
-            while ( mailbox.peek() != null )
+            while ( hasMessages() )
             {
                 myWindow.showMessage( mailbox.remove() );
             }
         }
-
     }
 
-/**
- * 
- * Get quote of stock
- * @param symbol the stock symbol
- */
+
+    /**
+     * 
+     * Get quote of stock
+     * 
+     * @param symbol
+     *            the stock symbol
+     */
     public void getQuote( String symbol )
     {
         brokerage.getQuote( symbol, this );
 
     }
 
-/**
- * 
- * Place order function
- * @param order the order
- */
+
+    /**
+     * 
+     * Place order function
+     * 
+     * @param order
+     *            the order
+     */
     public void placeOrder( TradeOrder order )
     {
-        brokerage.placeOrder( order ); 
+        if ( order == null )
+            return;
+
+        brokerage.placeOrder( order );
     }
 
-/**
- * 
- * Quits the application
- */
+
+    /**
+     * 
+     * Quits the application
+     */
     public void quit()
     {
         brokerage.logout( this );

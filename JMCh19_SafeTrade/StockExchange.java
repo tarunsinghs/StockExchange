@@ -39,6 +39,9 @@ public class StockExchange
      */
     public void listStock( String symbol, String name, double price )
     {
+        if ( symbol == null )
+            return;
+
         listedStocks.put( symbol, new Stock( symbol, name, price ) );
     }
 
@@ -53,7 +56,14 @@ public class StockExchange
      */
     public String getQuote( String symbol )
     {
-        return listedStocks.get( symbol ).getQuote();
+        if ( symbol == null )
+            return "";
+
+        Stock stock = listedStocks.get( symbol );
+        if ( stock != null )
+            return stock.getQuote();
+
+        return symbol + " not found";
     }
 
 

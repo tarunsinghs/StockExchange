@@ -341,168 +341,174 @@ public class JUSafeTradeTest
 
     // --Test Trader
 
+    String password = "passwordddd";
+
+
     @Test
     public void traderConstructor()
     {
-        Trader test = new Trader( new Brokerage( new StockExchange() ),
-            "testTrader",
-            "1000" );
-        assertNotNull( test );
+        StockExchange exchange = new StockExchange();
+        Brokerage brokerage = new Brokerage( exchange );
+        exchange.listStock( "GGGL", "Giggle.com", 10.00 );
+        Trader t = new Trader( brokerage, name, password );
+        String str = t.toString();
+        assertTrue( "<< Invalid Trader Constructor >>", str.contains( "Trader[" ) );
     }
 
 
     @Test
     public void traderToString()
     {
-        Trader test = new Trader( new Brokerage( new StockExchange() ),
-            "testTrader",
-            "1000" );
-        assertNotNull( test.toString() );
+        StockExchange exchange = new StockExchange();
+        Brokerage brokerage = new Brokerage( exchange );
+        exchange.listStock( "GGGL", "Giggle.com", 10.00 );
+        Trader t = new Trader( brokerage, name, password );
+        assertNotNull( t.toString() );
     }
 
 
     @Test
     public void traderCompareTo()
     {
-        Trader test1 = new Trader( new Brokerage( new StockExchange() ),
-            "testTrader1",
-            "2000" );
-        Trader test2 = new Trader( new Brokerage( new StockExchange() ),
-            "testTrader2",
-            "2500" );
-        assertEquals( "<< Trader: " + test1.getName() + " compareTo ( "
-            + test2.getName() + " ) should be "
-            + test1.getName().compareToIgnoreCase( test2.getName() ) + " >>",
-            test1.compareTo( test2 ),
-            -1 );
-    }
-
-
-    @Test
-    public void traderQuit()
-    {
-        Brokerage testBk = new Brokerage( new StockExchange() );
-        Trader test1 = new Trader( testBk, "testTrader1", "1000" );
-        testBk.addUser( "testTrader1", "Pass" );
-        testBk.login( "testTrader1", "pass" );
-        test1.quit();
-        assertEquals( testBk.getLoggedTraders().size(), 0 );
-    }
-
-
-    @Test
-    public void traderGetQuote()
-    {
-        StockExchange testSe = new StockExchange();
-        testSe.listStock( symbol, "Trader", price );
-        Trader testTrader = new Trader( new Brokerage( testSe ),
-            "testTrader",
-            "1000" );
-        testTrader.getQuote( symbol );
-        assertTrue(
-            "<< Trader: getQuote( " + symbol + " ) should be "
-                + testTrader.mailbox().peek() + " >>",
-            testTrader.hasMessages() );
-    }
-
-
-    @Test
-    public void traderPlaceOrder()
-    {
-        StockExchange testSe = new StockExchange();
-        testSe.listStock( symbol, "Trader", price );
-        Trader testTrader = new Trader( new Brokerage( testSe ),
-            "testTrader",
-            "1000" );
-        testTrader.placeOrder( new TradeOrder( testTrader,
-            symbol,
-            buyOrder,
-            marketOrder,
-            numShares,
-            price ) );
-        assertTrue(
-            "<< Trader: placeOrder( " + symbol + " ) should be " + true + " >>",
-            testTrader.hasMessages() );
-    }
-
-
-    @Test
-    public void traderGetName()
-    {
-        Trader testTrader = new Trader( new Brokerage( new StockExchange() ),
-            "testTrader",
-            "1000" );
-        assertEquals(
-            "<< Trader: " + testTrader.getName() + " should be testTrader >>",
-            testTrader.getName(),
-            "testTrader" );
-    }
-
-
-    @Test
-    public void traderGetPassword()
-    {
-        Trader testTrader = new Trader( new Brokerage( new StockExchange() ),
-            "testTrader",
-            "1000" );
-        assertEquals(
-            "<< Trader: " + testTrader.getPassword() + " should be 1000 >>",
-            testTrader.getPassword(),
-            "1000" );
+        StockExchange exchange = new StockExchange();
+        Brokerage brokerage = new Brokerage( exchange );
+        exchange.listStock( "GGGL", "Giggle.com", 10.00 );
+        Trader t1 = new Trader( brokerage, name, password );
+        Trader t2 = new Trader( brokerage, "BOB", password );
+        Trader t3 = new Trader( brokerage, "ROB", password );
+        assertTrue( "<< Trader: CompareTo should be negative, 0, positive >>",
+            t1.compareTo( t3 ) < 0 && t1.compareTo( t1 ) == 0 && t1.compareTo( t2 ) > 0 );
     }
 
 
     @Test
     public void traderEquals()
     {
-        Trader testTrader1 = new Trader( new Brokerage( new StockExchange() ),
-            "testTrader1",
-            "1000" );
-        Trader testTrader2 = new Trader( new Brokerage( new StockExchange() ),
-            "testTrader2",
-            "2000" );
-        assertFalse( "<< Trader: " + testTrader1.equals( testTrader2 )
-            + " should be " + false + " >>",
-            testTrader1.equals( testTrader2 ) );
+        StockExchange exchange = new StockExchange();
+        Brokerage brokerage = new Brokerage( exchange );
+        exchange.listStock( "GGGL", "Giggle.com", 10.00 );
+        Trader t = new Trader( brokerage, name, password );
+        Trader t2 = new Trader( brokerage, "BOB", password );
+        Object object = new Object();
+        assertTrue( "<< Traders should be equal >>", t.equals( t ) );
+        assertFalse( "<< Traders aren't equal >>", t.equals( t2 ) );
+
+        try
+        {
+            boolean fail = t.equals( object );
+            fail( "<< not an instanceof trader >>" );
+        }
+
+        catch ( ClassCastException ex )
+        {
+        }
     }
 
 
     @Test
-    public void traderOpenWindow()
+    public void traderGetName()
     {
-        Trader testTrader1 = new Trader( new Brokerage( new StockExchange() ),
-            "testTrader",
-            "1000" );
-        testTrader1.receiveMessage( "Test Message" );
-        testTrader1.openWindow();
-        assertFalse( "<< Trader: " + testTrader1.mailbox().size()
-            + " should be " + 0 + " >>", testTrader1.hasMessages() );
+        StockExchange exchange = new StockExchange();
+        Brokerage brokerage = new Brokerage( exchange );
+        exchange.listStock( "GGGL", "Giggle.com", 10.00 );
+        Trader t = new Trader( brokerage, name, password );
+        assertTrue( "<< Trader: getName should be " + name + " >>", t.getName().equals( name ) );
+    }
+
+
+    @Test
+    public void traderGetPassword()
+    {
+        StockExchange exchange = new StockExchange();
+        Brokerage brokerage = new Brokerage( exchange );
+        exchange.listStock( "GGGL", "Giggle.com", 10.00 );
+        Trader t = new Trader( brokerage, name, password );
+        assertTrue( "<< Trader: getPassword should be " + password + " >>", t.getPassword().equals( password ) );
+    }
+
+
+    @Test
+    public void traderGetQuote()
+    {
+        StockExchange exchange = new StockExchange();
+        Brokerage brokerage = new Brokerage( exchange );
+        exchange.listStock( "GGGL", "Giggle.com", 10.00 );
+        Trader t = new Trader( brokerage, name, password );
+        t.getQuote( symbol );
+        assertTrue( "<< Invalid Trader getQuote >>", t.hasMessages() );
+        t.openWindow();
+        t.getQuote( symbol );
+        assertFalse( "<< Invalid Trader getQuote >>", t.hasMessages() );
     }
 
 
     @Test
     public void traderHasMessages()
     {
-        Trader testTrader1 = new Trader( new Brokerage( new StockExchange() ),
-            "testTrader1",
-            "1000" );
-        assertTrue( "<< Trader: " + testTrader1.mailbox().size() + " should be "
-            + 0 + " >>", testTrader1.mailbox().isEmpty() );
+        StockExchange exchange = new StockExchange();
+        Brokerage brokerage = new Brokerage( exchange );
+        exchange.listStock( "GGGL", "Giggle.com", 10.00 );
+        Trader t = new Trader( brokerage, name, password );
+        assertFalse( "<< Trader should have no messages >>", t.hasMessages() );
+        t.receiveMessage( "message" );
+        assertTrue( "<< Trader should have messages>>", t.hasMessages() );
+    }
+
+
+    @Test
+    public void traderOpenWindow()
+    {
+        StockExchange exchange = new StockExchange();
+        Brokerage brokerage = new Brokerage( exchange );
+        exchange.listStock( "GGGL", "Giggle.com", 10.00 );
+        Trader t = new Trader( brokerage, name, password );
+        t.receiveMessage( "message" );
+        t.openWindow();
+        assertFalse( "<< Trader should have no messages left >>", t.hasMessages() );
+    }
+
+
+    @Test
+    public void traderPlaceOrder()
+    {
+        StockExchange exchange = new StockExchange();
+        Brokerage brokerage = new Brokerage( exchange );
+        exchange.listStock( "GGGL", "Giggle.com", 10.00 );
+        Trader t = new Trader( brokerage, name, password );
+        TradeOrder order = new TradeOrder( t, "GGGL", true, false, 10, 10.0 );
+        assertTrue( "<< mailbox isn't empty >>", t.mailbox().isEmpty() );
+        t.placeOrder( order );
+        assertTrue( "<< Invalid Trader placeOrder : should have messages >>", t.hasMessages() );
+        t.openWindow();
+        t.placeOrder( order );
+        assertFalse( "<< Invalid Trader placeOrder: should have no messages >>", t.hasMessages() );
+    }
+
+
+    @Test
+    public void traderQuit()
+    {
+        StockExchange exchange = new StockExchange();
+        Brokerage brokerage = new Brokerage( exchange );
+        exchange.listStock( "GGGL", "Giggle.com", 10.00 );
+        Trader t = new Trader( brokerage, name, password );
+        t.quit();
+        assertFalse( "<< invalid recieves messages >>", brokerage.getLoggedTraders().contains( t ) );
     }
 
 
     @Test
     public void traderReceiveMessage()
     {
-        Trader testTrader1 = new Trader( new Brokerage( new StockExchange() ),
-            "testTrader1",
-            "1000" );
-        testTrader1.receiveMessage( "Test Message" );
-        assertEquals(
-            "<< Trader: " + testTrader1.mailbox().peek() + " should be "
-                + "Test Message" + " >>",
-            testTrader1.mailbox().remove(),
-            "Test Message" );
+        StockExchange exchange = new StockExchange();
+        Brokerage brokerage = new Brokerage( exchange );
+        exchange.listStock( "GGGL", "Giggle.com", 10.00 );
+        Trader t = new Trader( brokerage, name, password );
+        t.receiveMessage( "message" );
+        assertFalse( "<< invalid receiveMessage >>", t.mailbox().isEmpty() );
+        t.openWindow();
+        t.receiveMessage( "message" );
+        assertTrue( "<< invalid receiveMessage >>", t.mailbox().isEmpty() );
     }
     // --Test Brokerage
 
@@ -741,22 +747,15 @@ public class JUSafeTradeTest
     @Test
     public void stockConstructor()
     {
-        PriorityQueue<TradeOrder> sellOrders = new PriorityQueue<TradeOrder>(
-            10, new PriceComparator() );
-        PriorityQueue<TradeOrder> buyOrders = new PriorityQueue<TradeOrder>( 10,
-            new PriceComparator( false ) );
+        PriorityQueue<TradeOrder> sellOrders = new PriorityQueue<TradeOrder>( 10, new PriceComparator() );
+        PriorityQueue<TradeOrder> buyOrders = new PriorityQueue<TradeOrder>( 10, new PriceComparator( false ) );
         int volume = 0;
         Stock s = new Stock( symbol, name, price );
-
         String toStr = s.toString();
-
         assertTrue( "<< Invalid Stock Constructor >>",
-            toStr.contains( "String stockSymbol:" + symbol )
-                && toStr.contains( "String companyName:" + name )
-                && toStr.contains( "double loPrice:" + price )
-                && toStr.contains( "double hiPrice:" + price )
-                && toStr.contains( "double lastPrice:" + price )
-                && toStr.contains( "int volume:" + volume )
+            toStr.contains( "String stockSymbol:" + symbol ) && toStr.contains( "String companyName:" + name )
+                && toStr.contains( "double loPrice:" + price ) && toStr.contains( "double hiPrice:" + price )
+                && toStr.contains( "double lastPrice:" + price ) && toStr.contains( "int volume:" + volume )
                 && toStr.contains( "PriorityQueue buyOrders:" + buyOrders )
                 && toStr.contains( "PriorityQueue sellOrders:" + sellOrders ) );
     }
@@ -764,43 +763,151 @@ public class JUSafeTradeTest
 
     @Test
     public void StockGetQuote()
-
     {
-
         Stock stock = new Stock( symbol, "name", price );
-
-        assertEquals( "MESSAGE", stock.getQuote(), "name (" + symbol + 
-            ")\nPrice: " + price + " hi: " + price + " lo: " + price
-            + " vol: 0\nAsk: none Bid: none" );
-
+        assertEquals( "MESSAGE",
+            stock.getQuote(),
+            "name (" + symbol + ")\nPrice: " + price + " hi: " + price + " lo: " + price
+                + " vol: 0\nAsk: none Bid: none" );
     }
 
 
     @Test
-    public void StockPlaceOrder()
+    public void StockGetQuoteCurrentAskBid()
     {
-        StockExchange testSE = new StockExchange();
-        Stock testS = new Stock( symbol, "name", price );
-        testSE.listStock( symbol, "name", price );
-        Brokerage testBroker = new Brokerage( testSE );
-        Trader testTrader = new Trader( testBroker, "name", "password" );
-        TradeOrder testOrder = new TradeOrder( testTrader,
-            symbol,
-            buyOrder,
-            marketOrder,
-            numShares,
-            price );
-        testS.placeOrder( testOrder );
-        assertEquals( testS.getBuyOrders().isEmpty(), false );
-        assertTrue( testTrader.hasMessages() );
+        StockExchange exchange = new StockExchange();
+        Brokerage brokerage = new Brokerage( exchange );
+
+        Trader t1 = new Trader( brokerage, name, password );
+        TradeOrder order1Buy = new TradeOrder( t1, symbol, true, false, 11, 110.0 );
+
+        Trader t2 = new Trader( brokerage, name, password );
+        TradeOrder order2Sell = new TradeOrder( t2, symbol, false, false, 12, 111.1 );
+
+        Stock stock = new Stock( symbol, "name", price );
+        stock.placeOrder( order2Sell );
+        stock.placeOrder( order1Buy );
+
+        assertEquals( "MESSAGE",
+            stock.getQuote(),
+            "name (" + symbol + ")\nPrice: " + price + " hi: " + price + " lo: " + price + " vol: 0\n" + "Ask: "
+                + stock.getSellOrders().peek().getPrice() + " size: " + stock.getSellOrders().peek().getShares() + " "
+                + "Bid: " + stock.getBuyOrders().peek().getPrice() + " size: "
+                + stock.getBuyOrders().peek().getShares() );
+    }
+
+
+    @Test
+    public void StockPlaceOrderBuyOrder()
+    {
+        StockExchange exchange = new StockExchange();
+        Stock gggl = new Stock( symbol, "name", price );
+        exchange.listStock( symbol, "name", price );
+        Brokerage brokerage = new Brokerage( exchange );
+        Trader trader = new Trader( brokerage, "name", "password" );
+        TradeOrder testing = new TradeOrder( trader, symbol, buyOrder, marketOrder, numShares, price );
+        gggl.placeOrder( testing );
+        assertEquals( gggl.getBuyOrders().isEmpty(), false );
+        assertTrue( trader.hasMessages() );
+    }
+
+
+    @Test
+    public void StockPlaceOrderBuyNullOrder()
+    {
+        StockExchange exchange = new StockExchange();
+        Stock gggl = new Stock( symbol, "name", price );
+        exchange.listStock( symbol, "name", price );
+        Brokerage brokerage = new Brokerage( exchange );
+        Trader trader = new Trader( brokerage, "name", "password" );
+        TradeOrder testing = new TradeOrder( trader, symbol, buyOrder, marketOrder, numShares, price );
+        gggl.placeOrder( null );
+        assertEquals( gggl.getBuyOrders().isEmpty(), true );
+        assertFalse( trader.hasMessages() );
+    }
+
+
+    @Test
+    public void StockPlaceOrderSellOrder()
+    {
+        StockExchange exchange = new StockExchange();
+        Stock gggl = new Stock( symbol, "name", price );
+        exchange.listStock( symbol, "name", price );
+        Brokerage brokerage = new Brokerage( exchange );
+        Trader trader = new Trader( brokerage, "name", "password" );
+        TradeOrder testing = new TradeOrder( trader, symbol, !buyOrder, marketOrder, numShares, price );
+        gggl.placeOrder( testing );
+        assertEquals( gggl.getSellOrders().isEmpty(), false );
+        assertTrue( trader.hasMessages() );
+    }
+
+
+    @Test
+    public void StockPlaceOrderSellNullOrder()
+    {
+        StockExchange exchange = new StockExchange();
+        Stock gggl = new Stock( symbol, "name", price );
+        exchange.listStock( symbol, "name", price );
+        Brokerage brokerage = new Brokerage( exchange );
+        Trader trader = new Trader( brokerage, "name", "password" );
+        TradeOrder testing = new TradeOrder( trader, symbol, !buyOrder, marketOrder, numShares, price );
+        gggl.placeOrder( null );
+        assertEquals( gggl.getSellOrders().isEmpty(), true );
+        assertFalse( trader.hasMessages() );
     }
 
 
     @Test
     public void stockToStringTest()
     {
-        Stock testS = new Stock( symbol, name, price );
-        assertNotNull( testS.toString() );
+        Stock s = new Stock( symbol, name, price );
+        assertNotNull( s.toString() );
+    }
+
+
+    @Test
+    public void StockExecuteOrders()
+    {
+        StockExchange exchange = new StockExchange();
+        Brokerage brokerage = new Brokerage( exchange );
+
+        Trader buyer = new Trader( brokerage, name, password );
+        TradeOrder order2Buy = new TradeOrder( buyer, symbol, true, false, 11, 110.0 );
+
+        Trader seller = new Trader( brokerage, name, password );
+        TradeOrder order2Sell = new TradeOrder( seller, symbol, false, false, 12, 111.1 );
+
+        Stock stock = new Stock( symbol, name, price );
+        stock.placeOrder( order2Sell );
+        stock.placeOrder( order2Buy );
+
+        stock.executeOrders();
+        assertTrue( buyer.hasMessages() );
+        assertTrue( seller.hasMessages() );
+    }
+
+
+    @Test
+    public void StockExecuteOrdersEmptyOrder()
+    {
+        StockExchange exchange = new StockExchange();
+        Brokerage brokerage = new Brokerage( exchange );
+
+        Trader buyer = new Trader( brokerage, name, password );
+        // TradeOrder order2Buy = new TradeOrder( buyer, symbol, true, false,
+        // 11, 110.0 );
+        //
+        Trader seller = new Trader( brokerage, name, password );
+        // TradeOrder order2Sell = new TradeOrder( seller, symbol, false, false,
+        // 12, 111.1 );
+        //
+        Stock stock = new Stock( symbol, name, price );
+        // stock.placeOrder(order2Sell);
+        // stock.placeOrder(order2Buy);
+
+        stock.executeOrders();
+        assertFalse( buyer.hasMessages() );
+        assertFalse( seller.hasMessages() );
     }
 
     // Remove block comment below to run JUnit test in console
